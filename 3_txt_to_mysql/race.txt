@@ -2,18 +2,19 @@ Half-Troll
 Human
 Half-Elf
 Elf
-Hobbit
+Halfling
 Gnome
 Dwarf
 Half-Orc
-Dunadan
+Dunedain
 High-Elf
 Kobold
 Yeek
 Ent
 Thunderlord
 Dragon
-BlackNum
+Hydra
+Black Numenore
 Damned
 Merfolk
 Barbarian
@@ -28,10 +29,10 @@ Dark Elf
 Werewolf
 Undead
 Vampire
-Enlightened
-Cambion
-Celestial
+Maiar
+Demonic
 Barlog
+Celestial
 Nephalem
 Gargoyle
 Golem

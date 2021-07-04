@@ -1,4 +1,3 @@
-#Перед запуском программы удалить все из БД MySQL
 
 #Проверить необходимые исходные данные для программы:
 
@@ -145,6 +144,17 @@ def connect():
 
 connect()
 
+#Перед запуском программы удалить все из БД MySQL
+
+drop_table = "DROP TABLE igroki, race, class;"
+cursor = my_bd.cursor()
+try:
+    cursor.execute(drop_table)
+    my_bd.commit()
+    print("Query executed!")        
+except Error as e:
+    print(e)
+    
 
 def fill_table(my_bd, query):
     cursor = my_bd.cursor()      
