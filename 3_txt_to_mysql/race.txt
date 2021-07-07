@@ -31,7 +31,7 @@ Undead
 Vampire
 Maiar
 Demonic
-Barlog
+Balrog
 Celestial
 Nephalem
 Gargoyle

@@ -85,8 +85,13 @@ echo
 if (isset($_POST['input_sR']))
 {
     $choice = $_POST['selectRace'];
-    echo'<option selected value="$choice">';
-    echo $choice; echo'</option>';
+    if ($choice == '$choice')
+        echo'<option selected value="$choice">';
+    else
+    {
+        echo'<option selected value="Half-Troll">';
+        echo $choice; echo'</option>';
+    }
 }
 
 while ($row = mysqli_fetch_array($result_rc)) 
@@ -109,9 +114,13 @@ echo
 if (isset($_POST['input_sC']))
 {
     $choice = $_POST['selectClass'];
-    echo'<option selected value="$choice">';
-    echo $choice;
-    echo'</option>';
+    if ($choice == '$choice')
+        echo'<option selected value="$choice">';
+    else
+    {
+        echo'<option selected value="Warrior">';
+        echo $choice; echo'</option>';
+    }
 }
 
 while ($row = mysqli_fetch_array($result_rc)) 
