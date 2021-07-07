@@ -68,14 +68,14 @@ td {
     color: #000;
     border: 1px solid #ddd;
 }
-a:link, a:visited {
+a:link.all, a:visited.all {
   color: black;
   text-decoration: none;
 }
 </style>
 </head>
 <body>	
-<a style="border-style:solid; color="fff";" href="">ALL</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+<a class="all" style="border-style:solid; color="fff";" href="">ALL</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
 
 <?php // <-------------------------------------------- php start
 
