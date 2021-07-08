@@ -74,10 +74,13 @@ a:link.all, a:visited.all {
 }
 </style>
 </head>
-<body>	
+<body>
 <a class="all" style="border-style:solid; color="fff";" href="">ALL</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
 
 <?php // <-------------------------------------------- php start
+
+// to save form value after user selected it
+session_start();
 
 // Dropdown menu and submit button for Race and Class
 $sql = "SELECT Race FROM race";
@@ -87,21 +90,18 @@ echo
 '<form method="post" action="">
 <select name=selectRace>';
 
-if (isset($_POST['input_sR']))
+if (!isset($_SESSION['id']))
 {
-    $choice = $_POST['selectRace'];
-    if ($choice == '$choice')
-        echo'<option selected value="$choice">';
-    else
-    {
-        echo'<option selected value="Half-Troll">';
-        echo $choice; echo'</option>';
-    }
+    $_SESSION['id'] = $_POST['selectRace'];    
 }
 
 while ($row = mysqli_fetch_array($result_rc)) 
 {
-    echo "<option value='" .$row['Race']."'> ".$row['Race'] . "</option>"; 
+    echo "<option ";
+    
+    if (isset($_SESSION['id']) && $_SESSION['id'] == $row['Race'])
+        echo "selected ";
+    echo "value='" .$row['Race']."'> ".$row['Race'] . "</option>"; 
 }
 
 echo 
