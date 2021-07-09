@@ -68,19 +68,17 @@ td {
     color: #000;
     border: 1px solid #ddd;
 }
-a:link.all, a:visited.all {
-  color: black;
-  text-decoration: none;
-}
 </style>
 </head>
 <body>
-<a class="all" style="border-style:solid; color="fff";" href="">ALL</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
 
 <?php // <-------------------------------------------- php start
 
 // to save form value after user selected it
-session_start();
+if (session_status() == PHP_SESSION_NONE)
+{
+    session_start();
+}
 
 // Dropdown menu and submit button for Race and Class
 $sql = "SELECT Race FROM race";
@@ -90,16 +88,16 @@ echo
 '<form method="post" action="">
 <select name=selectRace>';
 
-if (!isset($_SESSION['id']))
+if (!isset($_SESSION['idRace']))
 {
-    $_SESSION['id'] = $_POST['selectRace'];    
+    $_SESSION['idRace'] = $_POST['selectRace'];    
 }
-
+echo "<option value=All>All</option>";
 while ($row = mysqli_fetch_array($result_rc)) 
 {
     echo "<option ";
     
-    if (isset($_SESSION['id']) && $_SESSION['id'] == $row['Race'])
+    if (isset($_SESSION['idRace']) && $_SESSION['idRace'] == $row['Race'])
         echo "selected ";
     echo "value='" .$row['Race']."'> ".$row['Race'] . "</option>"; 
 }
@@ -109,28 +107,25 @@ echo
 <input type="submit" name="input_sR" class="button" value="Select Race">
 </form>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 
-$sql = "Select Class from class";
+$sql = "SELECT Class FROM class";
 $result_rc = mysqli_query($mysqli, $sql);
 
 echo
-'<form method="post" action="">
+'<form method="post">
 <select name=selectClass>';
 
-if (isset($_POST['input_sC']))
+if (!isset($_SESSION['idClass']))
 {
-    $choice = $_POST['selectClass'];
-    if ($choice == '$choice')
-        echo'<option selected value="$choice">';
-    else
-    {
-        echo'<option selected value="Warrior">';
-        echo $choice; echo'</option>';
-    }
+    $_SESSION['idClass'] = $_POST['selectClass'];    
 }
 
+echo "<option value=All>All</option>";
 while ($row = mysqli_fetch_array($result_rc)) 
 {
-    echo "<option value='" .$row['Class']."'> ".$row['Class'] . "</option>"; 
+    echo "<option ";
+	if (isset($_SESSION['idClass']) && $_SESSION['idClass'] == $row['Class'])
+			echo "selected ";
+	echo "value='" .$row['Class']."'> ".$row['Class'] . "</option>"; 
 }
 
 echo 
@@ -141,18 +136,35 @@ echo
 
 
 // Selected choice Race-Class
+
 if (isset($_POST['input_sR']))
 {
-	$number = $_POST['selectRace'];
-	$query = "SELECT * FROM igroki WHERE Race='$number' ORDER BY ";
-	$result = $mysqli -> query($query.  $column . ' ' . $sort_order);
+	if ($_SESSION['idRace'] == "All")
+	{
+		$query = 'SELECT * FROM igroki ORDER BY ';
+		$result = $mysqli -> query($query.  $column . ' ' . $sort_order);
+	}
+	else
+	{
+		$number = $_POST['selectRace'];
+		$query = "SELECT * FROM igroki WHERE Race='$number' ORDER BY ";
+		$result = $mysqli -> query($query.  $column . ' ' . $sort_order);
+	}
 }
 
 else if (isset($_POST['input_sC']))
 {
-	$number = $_POST['selectClass'];
-	$query = "SELECT * FROM igroki WHERE Class='$number' ORDER BY ";
-	$result = $mysqli -> query($query.  $column . ' ' . $sort_order);
+	if ($_SESSION['idClass'] == "All")
+	{
+		$query = 'SELECT * FROM igroki ORDER BY ';
+		$result = $mysqli -> query($query.  $column . ' ' . $sort_order);
+	}
+	else
+	{
+		$number = $_POST['selectClass'];
+		$query = "SELECT * FROM igroki WHERE Class='$number' ORDER BY ";
+		$result = $mysqli -> query($query.  $column . ' ' . $sort_order);
+	}
 }
 else
 {
