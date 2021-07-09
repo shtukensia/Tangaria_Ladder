@@ -233,7 +233,7 @@ if ($result)
 
 <?php while ($row = $result->fetch_assoc()) : ?>
 
-<tr>
+<tr <?php if ($row['Winner']=='Winner'){echo 'style="background-color: #9ACD32;"';}?>>
 <td<?php echo $column == 'N' ? $sort_active : '';?>>
 <?php echo $row['N'];?></td>
 
