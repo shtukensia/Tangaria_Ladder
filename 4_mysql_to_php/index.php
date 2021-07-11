@@ -82,8 +82,11 @@ if (session_status() == PHP_SESSION_NONE)
 
 // Dropdown menu and submit button for Race and Class
 $sql = "SELECT Race FROM race";
-$result_rc = mysqli_query($mysqli, $sql);
+$result_r = mysqli_query($mysqli, $sql);
+$sql = "SELECT Class FROM class";
+$result_c = mysqli_query($mysqli, $sql);
 
+// Form Select Race
 echo 
 '<form method="post" action="">
 <select name=selectRace>';
@@ -93,7 +96,7 @@ if (!isset($_SESSION['idRace']))
     $_SESSION['idRace'] = $_POST['selectRace'];    
 }
 echo "<option value=All>All</option>";
-while ($row = mysqli_fetch_array($result_rc)) 
+while ($row = mysqli_fetch_array($result_r)) 
 {
     echo "<option ";
     
@@ -104,11 +107,11 @@ while ($row = mysqli_fetch_array($result_rc))
 
 echo 
 '</select>
-<input type="submit" name="input_sR" class="button" value="Select Race">
-</form>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+<input type="submit" name="input_sR" class="button" value="Select Race">';
 
-$sql = "SELECT Class FROM class";
-$result_rc = mysqli_query($mysqli, $sql);
+
+
+// Form Select Class
 
 echo
 '<form method="post">
@@ -120,7 +123,7 @@ if (!isset($_SESSION['idClass']))
 }
 
 echo "<option value=All>All</option>";
-while ($row = mysqli_fetch_array($result_rc)) 
+while ($row = mysqli_fetch_array($result_c)) 
 {
     echo "<option ";
 	if (isset($_SESSION['idClass']) && $_SESSION['idClass'] == $row['Class'])
@@ -132,37 +135,37 @@ echo
 '</select>
 <input type="submit" name="input_sC" class="button" value="Select Class">
 </form>';
+
+
 /* End of dropdown menu and submit button for Race and Class */
 
 
 // Selected choice Race-Class
 
-if (isset($_POST['input_sR']))
+if (isset($_POST['input_sR']) or isset($_POST['input_sC']))
 {
-	if ($_SESSION['idRace'] == "All")
+	$numberC = $_POST['selectClass'];
+	$numberR = $_POST['selectRace'];
+	$query_raw = "SELECT * FROM igroki";
+	
+	if ($_SESSION['idRace'] !="All" && $_SESSION['idClass'] == "All")
 	{
-		$query = 'SELECT * FROM igroki ORDER BY ';
-		$result = $mysqli -> query($query.  $column . ' ' . $sort_order);
+		$query_raw = "SELECT * FROM igroki WHERE Race='$numberR'";
 	}
-	else
+	else if ($_SESSION['idRace'] =="All" && $_SESSION['idClass'] != "All")
 	{
-		$number = $_POST['selectRace'];
-		$query = "SELECT * FROM igroki WHERE Race='$number' ORDER BY ";
-		$result = $mysqli -> query($query.  $column . ' ' . $sort_order);
+		$query_raw = "SELECT * FROM igroki WHERE Class='$numberC'" ;
 	}
-}
+	else if ($_SESSION['idRace'] !="All" && $_SESSION['idClass'] != "All")
+	{
+		$query_raw = "SELECT * FROM igroki WHERE Class='$numberC' AND Race='$numberR'";
+	}
 
-else if (isset($_POST['input_sC']))
-{
-	if ($_SESSION['idClass'] == "All")
+	$query = $query_raw . "ORDER BY ";
+	$result = $mysqli -> query($query.  $column . ' ' . $sort_order);
+	if ($_SESSION['idRace'] == "All" && $_SESSION['idClass'] == "All")
 	{
 		$query = 'SELECT * FROM igroki ORDER BY ';
-		$result = $mysqli -> query($query.  $column . ' ' . $sort_order);
-	}
-	else
-	{
-		$number = $_POST['selectClass'];
-		$query = "SELECT * FROM igroki WHERE Class='$number' ORDER BY ";
 		$result = $mysqli -> query($query.  $column . ' ' . $sort_order);
 	}
 }
