@@ -16,7 +16,10 @@ $columns = array(
     'Exp',
     'MaxDepth',
     'TurnsUsed',
-    'Death'
+    'Death',
+    'Account',
+    'Date',
+    'Timestamp'
 );
 $column = isset($_GET['column']) && in_array($_GET['column'], $columns) ? $_GET['column'] : $columns[0];
 $sort_order = isset($_GET['order']) && strtolower($_GET['order']) == 'desc' ? 'DESC' : 'ASC'; // default: asc
@@ -232,6 +235,14 @@ if ($result)
 <th><a href="index.php?column=Death&order=
 <?php echo $asc_desc; ?>">Death <img src="triangles.png" width="8"></img><i
 <?php echo $column == 'Death' ? '-' . $up_down : ''; ?>"></i></a></th>
+
+<th><a href="index.php?column=Account&order=
+<?php echo $asc_desc; ?>">Player <img src="triangles.png" width="8"></img><i
+<?php echo $column == 'Account' ? '-' . $up_down : ''; ?>"></i></a></th>
+
+<th><a href="index.php?column=Timestamp&order=
+<?php echo $asc_desc; ?>">Date <img src="triangles.png" width="8"></img><i
+<?php echo $column == 'Timestamp' ? '-' . $up_down : ''; ?>"></i></a></th>
 </tr>
 
 <?php while ($row = $result->fetch_assoc()) : ?>
@@ -266,7 +277,14 @@ if ($result)
 
 <td<?php echo $column == 'Death' ? $sort_active : ''; ?>>
 <?php echo $row['Death']; ?></td>
+
+<td<?php echo $column == 'Account' ? $sort_active : ''; ?>>
+<?php echo $row['Account']; ?></td>
+
+<td<?php echo $column == 'Date' ? $sort_active : ''; ?>>
+<?php echo $row['Date']; ?></td>
 </tr>
+
 
 <?php endwhile; ?>
 
