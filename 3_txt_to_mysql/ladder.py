@@ -1,63 +1,24 @@
 
-#Проверить необходимые исходные данные для программы:
+# https://stat.tangaria.com/
 
-#Вставить адрес папки с файлами!
-#1) для ladder_html формата r"C:/Users/<user>/Documents/Python/tangaria/Ladder/"
-#Где будет создаваться .html:
-
-ladder_html=""
-
-#2) вставить адрес для raw_files формата "C:/Users/<user>/Documents/Python/tangaria/Ladder/Исходные_файлы/"
-#Файлы Tangaria Character Dump:
+# 1) add raw files, eg "C:/Users/<user>/Documents/Python/tangaria/Ladder/chars/"
 
 raw_files="chars/"
 
-#3)В папку с файлом этой программы положи два текстовых файла рассы-классы:
+# 2) To root folder (where script lays) put list of races/classes: race.txt and class.txt
 
-#race.txt (список расс)
-#class.txt (список классов)
-
-#Начало кода программы
-#Работа с шапкой html-страницы
-html_str = """
-<html>
-<table border="1">
-<tr>
-<td>#</td>
-<td>Version</td>
-<td>Name</td>
-<td>Race</td>
-<td>Class</td>
-<td>Level</td>
-<td>Exp</td>
-<td>Max Depth</td>
-<td>Turns Used</td>
-<td>Death</td>
-</tr>
-"""
-Html_file=open(ladder_html+"ladder.html","w")   
-Html_file.write(html_str)
-Html_file.close()
-#Конец работы с шапкой html-страницы
-
-#Имена игроков из названий файлов .txt
+# Player names from .txt files
 import os
 files_list=os.listdir(path=raw_files)
 
-#Построение списка данных для сортировки
-name_num=0
-version_list=[]
-race_list=[]
-class_name_list=[]
-level_list=[]
-cur_exp_list=[]
-max_depth_list=[]
-turns_used_list=[]
-death_list=[]
-igroki=[]
+name_num=0          # N ('#') of player
+igroki=[]           # final array where we put all stuff 
+
 for file in files_list:
-    l = open(raw_files+file,"r")
-    line=l.readlines()
+    l = open(raw_files+file,"r") # put to 'l' opened file with 'r'eading permission
+    line=l.readlines()           # put to 'line' array with all lines
+
+    # analyzing lines    
     version_raw=line[0]
     version=version_raw[12:17]
     name=files_list[name_num]
@@ -75,54 +36,61 @@ for file in files_list:
     max_depth=max_depth_raw[9:25].strip()
     turns_used_player_raw=line[7]
     turns_used=turns_used_player_raw[28:42].strip()
+
+    # Killed by
+
     killed = "Killed by"
     death = " "
-    for i in range(len(line)):
-        if killed in line[i]:
-            death_raw=line[i]
+    for i in range(len(line)): # for each line in file
+        if killed in line[i]:  # if found "Killed by" in a line
+            death_raw=line[i]  # this line will become death_raw
             death=death_raw[9:].strip()
             death=death.replace(".","")
-    version_list.append(version)
-    race_list.append(race)
-    class_name_list.append(class_name)
-    level_list.append(level)
-    cur_exp_list.append(cur_exp)
-    max_depth_list.append(max_depth)
-    turns_used_list.append(turns_used)
-    death_list.append(death)
-    igrok=[version,name,race,class_name,level,cur_exp,max_depth,turns_used,death]
+
+    # LF Winner
+            
+    killed_morg_check= "Killed Morgoth, Lord of Darkness"
+    killed_morg_status=""
+    for i in range(len(line)):
+        if killed_morg_check in line[i]:
+            killed_morg_status="Winner"
+
+    # LF Player ID
+    player_id = "Player ID:"
+    account = ""                # some dumps do not have Player ID
+    for i in range(len(line)): 
+        if player_id in line[i]:
+            id_raw = line[i]
+            account = id_raw[11:].strip()
+
+    # LF date
+    date_mark = "Time: "
+    date = ""                # some dumps do not have date
+    for i in range(len(line)): 
+        if date_mark in line[i]:
+            date_raw = line[i]
+            date = date_raw[15:].strip()
+
+    # LF Unix timestamp
+    timestamp_mark = "Timestamp:"
+    timestamp = ""                # some dumps do not have timestamp
+    for i in range(len(line)): 
+        if timestamp_mark in line[i]:
+            timestamp_raw = line[i]
+            timestamp = timestamp_raw[11:].strip()            
+
+    # put stuff into final array
+    igrok=[version,name,race,class_name,level,cur_exp,max_depth,turns_used,death,
+           killed_morg_status,account, date, timestamp]
     igroki.append(igrok)
     l.close()
 
-#Сортировка данных по cur_exp
+# Sort data by cur_exp
 igroki.sort(key=lambda i :i[5], reverse=1)
 
-
-#Запись html-тегов для таблицы со ссылками на файлы игроков
-output = open(ladder_html+"ladder.html", "a")
-nomer=1
-for igrok in igroki:
-    print("<tr>\n",
-          "<td>",nomer,"</td>",
-          "<td>",igrok[0],"</td>",
-
-          #Ссылка на файл игрока          
-          "<td>","<a href=",raw_files+igrok[1].replace(' ','%20'),'" target="_blank">',igrok[1].split('-')[0],'</a>',"</td>",
-          
-          "<td>",igrok[2],"</td>",
-          "<td>",igrok[3],"</td>",
-          "<td>",igrok[4],"</td>",
-          "<td>",igrok[5],"</td>",
-          "<td>",igrok[6],"</td>",
-          "<td>",igrok[7],"</td>",
-          "<td>",igrok[8],"</td>",
-          "</tr>\n",file=output)
-    nomer+=1
-output.close()
-
-#Put data from list of lists to MySQL table
-#Через CMD Install mysql_connector_python-8.0.25-cp39-cp39-win_amd64.whl
-#Insert MySQL BD data for connection (user,pass etc)
+# Put data from list of lists to MySQL table
+# Prereq: install mysql_connector_python-8.0.25-cp39-cp39-win_amd64.whl
+# Insert MySQL BD data for connection (user,pass etc)
 
 import mysql.connector
 from mysql.connector import Error
@@ -144,14 +112,14 @@ def connect():
 
 connect()
 
-#Перед запуском программы удалить все из БД MySQL
+# Wiping MySQL table
 
-drop_table = "DROP TABLE igroki, race, class;"
+drop_table = "DROP TABLE IF EXISTS igroki, race, class;"
 cursor = my_bd.cursor()
 try:
     cursor.execute(drop_table)
     my_bd.commit()
-    print("Query executed!")        
+    print("Tables cleaned!")        
 except Error as e:
     print(e)
     
@@ -178,7 +146,11 @@ create_table = """
     MaxDepth TEXT NOT NULL,
     TurnsUsed INTEGER,
     Death TEXT,
-    File TEXT);
+    File TEXT,
+    Winner TEXT,
+    Account TEXT,
+    Date TEXT,
+    Timestamp TEXT);    
 """
 
 create_race="""
@@ -194,7 +166,7 @@ create_class="""
 fill_table(my_bd,create_table)
 
 
-#Расы и классы из файла
+# Races and classes from files
 race_file=open("race.txt", "r")
 class_file=open("class.txt", "r")
 race_raw = race_file.readlines()
@@ -209,7 +181,7 @@ for element in class_name_raw:
 
 race_file.close
 class_file.close
-#Конец создания списка расс-классов
+# End of race/class creation
 
 fill_table(my_bd,create_race)
 fill_table(my_bd,create_class)
@@ -219,20 +191,23 @@ for igrok in igroki:
     igrok.append(name)
 
 
-#Вставляем данные из списков в таблицы:
+# Inserting data from list to table:
 
-#Заполнение таблицы igroki   
+# Filling 'igroki' table
 cursor = my_bd.cursor()
-cursor.executemany("INSERT INTO igroki(Version,File,Race,Class,Level,Exp,MaxDepth,TurnsUsed,Death,Name) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", igroki)
+# !! 'Name' must be last !!
+cursor.executemany("INSERT INTO igroki(Version,File,Race,Class,Level,Exp,\
+            MaxDepth,TurnsUsed,Death,Winner,Account,Date,Timestamp,Name) \
+VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", igroki)
 my_bd.commit()
 
-#Заполнение таблицы race 
+# Filling 'race'
 cursor = my_bd.cursor()
 races_values = [[item] for item in race]
 cursor.executemany(u"INSERT INTO `race`(`Race`) VALUES (%s)", races_values)
 my_bd.commit()
 
-#Заполнение таблицы class 
+# Filling 'class'
 cursor = my_bd.cursor()
 class_values = [[item] for item in class_name]
 cursor.executemany(u"INSERT INTO `class`(`Class`) VALUES (%s)", class_values)
