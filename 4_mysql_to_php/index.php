@@ -22,7 +22,7 @@ $columns = array(
     'Timestamp'
 );
 $column = isset($_GET['column']) && in_array($_GET['column'], $columns) ? $_GET['column'] : $columns[12];
-$sort_order = isset($_GET['order']) && strtolower($_GET['order']) == 'desc' ? 'ASC':'DESC'; // default: asc
+$sort_order = isset($_GET['order']) && strtolower($_GET['order']) == 'asc' ? 'ASC':'DESC'; // default: desc
 
 ?> <!---------------------------------------------- php end  -->
 
