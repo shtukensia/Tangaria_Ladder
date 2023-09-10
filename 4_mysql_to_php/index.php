@@ -136,7 +136,13 @@ while ($row = mysqli_fetch_array($result_c))
 
 echo 
 '</select>
-<input type="submit" name="input_sC" class="button" value="Select Class">
+<input type="submit" name="input_sC" class="button" value="Select Class"></form>';
+
+echo 
+'<form id="accountFilterForm">
+<label for="accountFilter" style="margin-left: 10px;">Account:</label>
+<input type="text" id="accountFilter">
+<button type="button" onclick="filterByAccount()">Show</button>
 </form>';
 
 
@@ -289,6 +295,30 @@ if ($result)
 <?php endwhile; ?>
 
 </table>
+
+<script>
+    function filterByAccount() {
+        const accountName = document.getElementById("accountFilter").value.trim();
+        const rows = document.querySelectorAll("table tr");
+        
+        for (let i = 1; i < rows.length; i++) { // Start from 1 to skip header row
+            const accountCell = rows[i].querySelector("td:nth-child(11)"); // Assuming account is 11th column
+            if (accountCell.textContent.trim() !== accountName && accountName !== "") {
+                rows[i].style.display = "none";
+            } else {
+                rows[i].style.display = "";
+            }
+        }
+    }
+
+    document.getElementById("accountFilter").addEventListener('keydown', function(e) {
+        if (e.keyCode === 13) {  // Check if the pressed key was "Enter"
+            e.preventDefault();  // Prevent the form from submitting
+            filterByAccount();   // Call your function instead
+        }
+    });
+</script>
+
 </body>
 </html>
 
