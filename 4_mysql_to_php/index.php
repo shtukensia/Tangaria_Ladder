@@ -268,9 +268,10 @@ if ($result)
         const rows = document.querySelectorAll("table tr");
         
         for (let i = 1; i < rows.length; i++) { 
-            const nameCell = rows[i].querySelector("td:nth-child(3)").textContent.trim(); 
-            const deathCell = rows[i].querySelector("td:nth-child(10)").textContent.trim();
-            const accountCell = rows[i].querySelector("td:nth-child(11)").textContent.trim(); 
+            const cells = rows[i].querySelectorAll("td");
+            const nameCell = cells[2].textContent.trim(); 
+            const deathCell = cells[9].textContent.trim();
+            const accountCell = cells[10].textContent.trim();
 
             if (
                 (characterName && nameCell !== characterName) || 
@@ -284,24 +285,12 @@ if ($result)
         }
     }
 
-    document.getElementById("nameFilter").addEventListener('keydown', function(e) {
-        if (e.keyCode === 13) {  // Check if the pressed key was "Enter"
+    document.body.addEventListener('keydown', function(e) {
+        const targetId = e.target.id;
+        if ((targetId === "nameFilter" || targetId === "deathFilter" || targetId === "accountFilter") &&
+             e.keyCode === 13) { // Check if the pressed key was "Enter"
             e.preventDefault();  // Prevent the form from submitting
-            filterByCriteria();  // Call your function instead
-        }
-    });
-    
-    document.getElementById("deathFilter").addEventListener('keydown', function(e) {
-        if (e.keyCode === 13) {
-            e.preventDefault();
-            filterByCriteria();
-        }
-    });
-    
-    document.getElementById("accountFilter").addEventListener('keydown', function(e) {
-        if (e.keyCode === 13) {
-            e.preventDefault();
-            filterByCriteria();
+            filterByCriteria();  // Call common function instead
         }
     });
 
