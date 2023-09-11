@@ -38,8 +38,7 @@ $sort_order = isset($_GET['order']) && strtolower($_GET['order']) == 'asc' ? 'AS
 <?php // <-------------------------------------------- php start
 
 // to save form value after user selected it
-if (session_status() == PHP_SESSION_NONE)
-{
+if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
@@ -59,13 +58,11 @@ echo
 '<form method="post" action="">
 <select name=selectRace>';
 
-if (!isset($_SESSION['idRace']))
-{
+if (!isset($_SESSION['idRace'])) {
     $_SESSION['idRace'] = $_POST['selectRace'];    
 }
 echo "<option value=All>All</option>";
-while ($row = mysqli_fetch_array($result_r)) 
-{
+while ($row = mysqli_fetch_array($result_r)) {
     echo "<option ";
     
     if (isset($_SESSION['idRace']) && $_SESSION['idRace'] == $row['Race'])
@@ -85,14 +82,12 @@ echo
 '<form method="post">
 <select name=selectClass>';
 
-if (!isset($_SESSION['idClass']))
-{
+if (!isset($_SESSION['idClass'])) {
     $_SESSION['idClass'] = $_POST['selectClass'];    
 }
 
 echo "<option value=All>All</option>";
-while ($row = mysqli_fetch_array($result_c)) 
-{
+while ($row = mysqli_fetch_array($result_c)) {
     echo "<option ";
     if (isset($_SESSION['idClass']) && $_SESSION['idClass'] == $row['Class'])
             echo "selected ";
@@ -150,8 +145,7 @@ if (isset($_POST['input_sR']) or isset($_POST['input_sC'])) {
 }
 
 // End selected choice Race-Class
-if ($result)
-{
+if ($result) {
     $up_down = str_replace(array(
         'ASC',
         'DESC'
