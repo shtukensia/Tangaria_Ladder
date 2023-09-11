@@ -100,10 +100,12 @@ echo
 
 echo 
 '<form id="accountFilterForm">
+<label for="nameFilter" style="margin-left: 10px;">Name:</label>
+<input type="text" id="nameFilter">
+<label for="deathFilter" style="margin-left: 10px;">Death:</label>
+<input type="text" id="deathFilter">
 <label for="accountFilter" style="margin-left: 10px;">Account:</label>
 <input type="text" id="accountFilter">
-<label for="nameFilter" style="margin-left: 10px;">Character Name:</label>
-<input type="text" id="nameFilter">
 <button type="button" onclick="filterByCriteria()">Show</button>
 </form>';
 
@@ -260,17 +262,21 @@ if ($result)
 
 <script>
     function filterByCriteria() {
-        const accountName = document.getElementById("accountFilter").value.trim();
         const characterName = document.getElementById("nameFilter").value.trim();
+        const deathValue = document.getElementById("deathFilter").value.trim();
+        const accountName = document.getElementById("accountFilter").value.trim();
         const rows = document.querySelectorAll("table tr");
         
         for (let i = 1; i < rows.length; i++) { 
-            const accountCell = rows[i].querySelector("td:nth-child(11)"); 
             const nameCell = rows[i].querySelector("td:nth-child(3)"); 
+            const deathCell = rows[i].querySelector("td:nth-child(10)");
+            const accountCell = rows[i].querySelector("td:nth-child(11)"); 
 
-            if (accountName && accountCell.textContent.trim() !== accountName) {
+            if (characterName && nameCell.textContent.trim() !== characterName) {
                 rows[i].style.display = "none";
-            } else if (characterName && nameCell.textContent.trim() !== characterName) {
+            } else if (deathValue && deathCell.textContent.trim() !== deathValue) {
+                rows[i].style.display = "none";
+            } else if (accountName && accountCell.textContent.trim() !== accountName) {
                 rows[i].style.display = "none";
             } else {
                 rows[i].style.display = "";
@@ -278,19 +284,27 @@ if ($result)
         }
     }
 
-    document.getElementById("accountFilter").addEventListener('keydown', function(e) {
+    document.getElementById("nameFilter").addEventListener('keydown', function(e) {
         if (e.keyCode === 13) {  // Check if the pressed key was "Enter"
             e.preventDefault();  // Prevent the form from submitting
             filterByCriteria();  // Call your function instead
         }
     });
-
-    document.getElementById("nameFilter").addEventListener('keydown', function(e) {
+    
+    document.getElementById("deathFilter").addEventListener('keydown', function(e) {
         if (e.keyCode === 13) {
-            e.preventDefault();  
+            e.preventDefault();
             filterByCriteria();
         }
     });
+    
+    document.getElementById("accountFilter").addEventListener('keydown', function(e) {
+        if (e.keyCode === 13) {
+            e.preventDefault();
+            filterByCriteria();
+        }
+    });
+
 </script>
 
 </body>
