@@ -89,9 +89,9 @@ echo "<option value=All>All</option>";
 while ($row = mysqli_fetch_array($result_c)) 
 {
     echo "<option ";
-	if (isset($_SESSION['idClass']) && $_SESSION['idClass'] == $row['Class'])
-			echo "selected ";
-	echo "value='" .$row['Class']."'> ".$row['Class'] . "</option>"; 
+    if (isset($_SESSION['idClass']) && $_SESSION['idClass'] == $row['Class'])
+            echo "selected ";
+    echo "value='" .$row['Class']."'> ".$row['Class'] . "</option>"; 
 }
 
 echo 
@@ -117,37 +117,37 @@ echo
 
 if (isset($_POST['input_sR']) or isset($_POST['input_sC']))
 {
-	$numberC = $_POST['selectClass'];
-	$numberR = $_POST['selectRace'];
-	$query_raw = "SELECT * FROM igroki";
-	
-	if ($_SESSION['idRace'] !="All" && $_SESSION['idClass'] == "All")
-	{
-		$query_raw = "SELECT * FROM igroki WHERE Race='$numberR'";
-	}
-	else if ($_SESSION['idRace'] =="All" && $_SESSION['idClass'] != "All")
-	{
-		$query_raw = "SELECT * FROM igroki WHERE Class='$numberC'" ;
-	}
-	else if ($_SESSION['idRace'] !="All" && $_SESSION['idClass'] != "All")
-	{
-		$query_raw = "SELECT * FROM igroki WHERE Class='$numberC' AND Race='$numberR'";
-	}
+    $numberC = $_POST['selectClass'];
+    $numberR = $_POST['selectRace'];
+    $query_raw = "SELECT * FROM igroki";
+    
+    if ($_SESSION['idRace'] !="All" && $_SESSION['idClass'] == "All")
+    {
+        $query_raw = "SELECT * FROM igroki WHERE Race='$numberR'";
+    }
+    else if ($_SESSION['idRace'] =="All" && $_SESSION['idClass'] != "All")
+    {
+        $query_raw = "SELECT * FROM igroki WHERE Class='$numberC'" ;
+    }
+    else if ($_SESSION['idRace'] !="All" && $_SESSION['idClass'] != "All")
+    {
+        $query_raw = "SELECT * FROM igroki WHERE Class='$numberC' AND Race='$numberR'";
+    }
 
-	$query = $query_raw . "ORDER BY ";
-	$result = $mysqli -> query($query.  $column . ' ' . $sort_order);
-	if ($_SESSION['idRace'] == "All" && $_SESSION['idClass'] == "All")
-	{
-		$query = 'SELECT * FROM igroki ORDER BY ';
-		$result = $mysqli -> query($query.  $column . ' ' . $sort_order);
-	}
+    $query = $query_raw . "ORDER BY ";
+    $result = $mysqli -> query($query.  $column . ' ' . $sort_order);
+    if ($_SESSION['idRace'] == "All" && $_SESSION['idClass'] == "All")
+    {
+        $query = 'SELECT * FROM igroki ORDER BY ';
+        $result = $mysqli -> query($query.  $column . ' ' . $sort_order);
+    }
 }
 else
 {
-	$query = 'SELECT * FROM igroki ORDER BY ';
-	$result = $mysqli -> query($query.  $column . ' ' . $sort_order);
+    $query = 'SELECT * FROM igroki ORDER BY ';
+    $result = $mysqli -> query($query.  $column . ' ' . $sort_order);
 }
-						
+                        
 // End selected choice Race-Class
 if ($result)
 {
