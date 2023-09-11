@@ -268,15 +268,15 @@ if ($result)
         const rows = document.querySelectorAll("table tr");
         
         for (let i = 1; i < rows.length; i++) { 
-            const nameCell = rows[i].querySelector("td:nth-child(3)"); 
-            const deathCell = rows[i].querySelector("td:nth-child(10)");
-            const accountCell = rows[i].querySelector("td:nth-child(11)"); 
+            const nameCell = rows[i].querySelector("td:nth-child(3)").textContent.trim(); 
+            const deathCell = rows[i].querySelector("td:nth-child(10)").textContent.trim();
+            const accountCell = rows[i].querySelector("td:nth-child(11)").textContent.trim(); 
 
-            if (characterName && nameCell.textContent.trim() !== characterName) {
-                rows[i].style.display = "none";
-            } else if (deathValue && deathCell.textContent.trim() !== deathValue) {
-                rows[i].style.display = "none";
-            } else if (accountName && accountCell.textContent.trim() !== accountName) {
+            if (
+                (characterName && nameCell !== characterName) || 
+                (deathValue && deathCell !== deathValue) || 
+                (accountName && accountCell !== accountName)
+            ) {
                 rows[i].style.display = "none";
             } else {
                 rows[i].style.display = "";
