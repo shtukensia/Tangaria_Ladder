@@ -3,7 +3,7 @@
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL); */
 
-include "conf.php"; // config file with db settings
+include "../include/conf.php"; // config file with db settings
 
 $mysqli = mysqli_connect($host, $login, $password, $database);
 $columns = array(
@@ -31,47 +31,7 @@ $sort_order = isset($_GET['order']) && strtolower($_GET['order']) == 'asc' ? 'AS
 <head>
 <meta charset="UTF-8">
 <title>Tangaria | multiplayer roguelike game</title>
-<style>
-html {
-    padding: 3px;
-}
-form {
-    display: inline;
-}
-table {
-    border: 1px solid #000;
-    border-collapse: collapse;
-    width: 100%;
-    margin-top: 10px;
-}
-th {
-    background-color: #000;
-    border: 1px solid #000;
-}
-th:hover {
-    background-color: #333;
-}
-th a {
-    display: block;
-    text-decoration:none;
-    padding: 3px;
-    color: #fff;
-    font-weight: bold;
-    font-size: 12px;
-    margin-left: 5px;                
-}
-tr {
-    background-color: #fff;
-}
-tr .active {
-    background-color: #eee;
-}            
-td {
-    padding-left: 12px;
-    color: #000;
-    border: 1px solid #ddd;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
 

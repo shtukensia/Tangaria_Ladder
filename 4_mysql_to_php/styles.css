@@ -1,0 +1,39 @@
+html {
+    padding: 3px;
+}
+form {
+    display: inline;
+}
+table {
+    border: 1px solid #000;
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 10px;
+}
+th {
+    background-color: #000;
+    border: 1px solid #000;
+}
+th:hover {
+    background-color: #333;
+}
+th a {
+    display: block;
+    text-decoration:none;
+    padding: 3px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 12px;
+    margin-left: 5px;                
+}
+tr {
+    background-color: #fff;
+}
+tr .active {
+    background-color: #eee;
+}            
+td {
+    padding-left: 12px;
+    color: #000;
+    border: 1px solid #ddd;
+}
